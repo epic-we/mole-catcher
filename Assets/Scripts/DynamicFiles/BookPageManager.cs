@@ -1,0 +1,152 @@
+using UnityEngine;
+using System;
+using System.Collections.Generic;
+using Obidos25;
+
+public class BookPageManager : MonoBehaviour
+{
+    [Serializable]
+    public class Page
+    {
+        [field: SerializeField] public List<LocalizedSprite> PageLocalizations { get; private set; }
+    }
+
+    [SerializeField] private List<Page> _bookPages;
+
+    [SerializeField] private Collider2D _backToStartButton;
+    [SerializeField] private Collider2D _firstPageButton;
+    [SerializeField] private Collider2D _pageForwardButton;
+    [SerializeField] private Collider2D _pageBackwardButton;
+
+    [SerializeField] private PlaySound _coverFlipSound;
+    [SerializeField] private PlaySound _pageFlipSound;
+
+    private int _currentPageIndex = 0;
+
+    private SpriteRenderer _bookSR;
+    private BoxCollider2D _collider;
+
+    private void Start()
+    {
+        _bookSR = GetComponent<SpriteRenderer>();
+        _collider = GetComponentInParent<BoxCollider2D>();
+
+        _pageBackwardButton.enabled = false;
+        _pageForwardButton.enabled = true;
+
+        if (_backToStartButton != null) _backToStartButton.enabled = false;
+
+        if (_firstPageButton != null)
+        {
+            _firstPageButton.enabled = true;
+            _pageForwardButton.enabled = false;
+        }
+
+        ChangePage(0, false);
+    }
+
+    public void SetPageSprite(int page, Sprite spr) 
+    {
+        foreach (LocalizedSprite ls in _bookPages[page].PageLocalizations)
+        {
+            ls.UpdateSprite(spr);
+        }
+
+        if (page == _currentPageIndex) ChangePage(page, false);
+    }
+
+    private void ChangePage(int page, bool reset = true)
+    {
+        if (page < 0 || page >= _bookPages.Count) return;
+
+        _pageForwardButton.enabled = true;
+        _pageBackwardButton.enabled = true;
+
+        if (_firstPageButton != null) _firstPageButton.enabled = true;
+        
+        if (_backToStartButton != null) _backToStartButton.enabled = true;
+
+        _bookSR.sprite = LocalizedAssets.GetLocalization<LocalizedSprite>(_bookPages[page].PageLocalizations, gameObject).Sprite;
+
+        _collider.UpdateColliderBasedOnSprite(_bookSR.sprite);
+
+        if (page == 0)
+        {
+            _pageBackwardButton.enabled = false;
+
+            Button bttn = _pageBackwardButton.GetComponent<Button>();
+            if (bttn.HighlightSR != null) bttn.HighlightSR.enabled = false;
+
+            Debug.Log("FIRST PAGE, HIDING BACKWORDS BUTTON");
+
+            if (_firstPageButton != null)
+            {
+                _pageForwardButton.enabled = false;
+
+                Button btt = _pageForwardButton.GetComponent<Button>();
+                if (btt.HighlightSR != null) btt.HighlightSR.enabled = false;
+            }
+            
+            if (_backToStartButton != null)
+            {
+                _backToStartButton.enabled = false;
+
+                Button btt = _backToStartButton.GetComponent<Button>();
+                if (btt.HighlightSR != null) btt.HighlightSR.enabled = false;
+            }
+
+            _coverFlipSound?.SoundPlay();
+        }
+        else if (page == _bookPages.Count - 1)
+        {
+            _pageForwardButton.enabled = false;
+            
+            Button btt = _pageForwardButton.GetComponent<Button>();
+            if (btt.HighlightSR != null) btt.HighlightSR.enabled = false;
+
+            Debug.Log("LAST PAGE, HIDING FORWARDS BUTTON");
+        }
+
+        if (page > 0)
+        {
+            if (_firstPageButton != null)
+            {
+                _firstPageButton.enabled = false;
+                
+                Button btt = _firstPageButton.GetComponent<Button>();
+                if (btt.HighlightSR != null) btt.HighlightSR.enabled = false;
+            }
+
+            _pageFlipSound?.SoundPlay();
+        }
+
+        if (page == 1)
+        {
+            if (_backToStartButton != null)
+            {
+                _backToStartButton.enabled = false;
+                
+                Button btt = _backToStartButton.GetComponent<Button>();
+                if (btt.HighlightSR != null) btt.HighlightSR.enabled = false;
+            }
+        }
+
+        if (reset && page == 0 && _bookPages.Count > 2) PlayerInteraction.Instance.ResetInteractable(true);
+
+        _currentPageIndex = page;
+    }
+
+    public void FlipPage(bool backwards)
+    {
+        int newPageIndex = backwards ? _currentPageIndex - 1 : _currentPageIndex + 1;
+
+        ChangePage(newPageIndex);
+    }
+
+    public void GoToFirstPage() => ChangePage(1);
+    public void Reset()
+    {
+        Debug.Log($"RESETING BOOK {name}", this);
+        ChangePage(0, false);
+    }
+}

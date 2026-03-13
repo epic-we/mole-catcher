@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ade0d608349ab464baf6ae98cbd00f63, type: 3}
+  m_Name: FinalCutsceneGoodPt
+  m_EditorClassIdentifier: Assembly-CSharp::Cutscene
+  _cutscenMusic: {fileID: 0}
+  _endButtonText: Acabar
+  _cutsceneBlocks:
+  - <CutsceneImage>k__BackingField: {fileID: 21300000, guid: 1bb299cf226bf8c45b3e8b00285f2795, type: 3}
+    <CutsceneTexts>k__BackingField:
+    - "Depois de identificares os espectadores suspeitos, estes foram retirados da
+      reuni\xE3o e posteriormente presos numa localiza\xE7\xE3o secreta."
+    - "A tua intui\xE7\xE3o estava correta e conseguiste descobrir quem estava a
+      tentar infiltrar-se."
+  - <CutsceneImage>k__BackingField: {fileID: 21300000, guid: c95ed15ef0962e34b82f680811031b00, type: 3}
+    <CutsceneTexts>k__BackingField:
+    - "A reuni\xE3o decorreu em segredo e um plano foi posto em marcha para iniciar
+      a revolu\xE7\xE3o."
+  - <CutsceneImage>k__BackingField: {fileID: 21300000, guid: b095aa583dc318b4798d483f520cb629, type: 3}
+    <CutsceneTexts>k__BackingField:
+    - "Gra\xE7as aos teus esfor\xE7os, os agentes da PIDE foram impedidos de interferir
+      com o plano."
+  - <CutsceneImage>k__BackingField: {fileID: 21300000, guid: 68a0721fe88944747874b80445b17878, type: 3}
+    <CutsceneTexts>k__BackingField:
+    - "E a revolu\xE7\xE3o foi um sucesso, libertando o povo portugu\xEAs das garras
+      do regime!"

@@ -1,0 +1,27 @@
+﻿title: Start
+---
+Hello! I'm here for the play. Can I have a ticket?
+    -> Yes. I’ll just need to see your identification.
+
+Ok. Here you go.{give_documents()}
+    -> What's your name? 
+
+{get_military_name()}
+<<jump Options>>
+===
+
+title: Options
+---
+    -> {get_password_question()} (password)
+        {get_password_dialog()}
+        <<jump Options>>
+   -> Where are you stationed?
+        {get_location_dialog()}
+        <<jump Options>>
+    -> What’s your codename?
+        {get_codename_dialog()}
+        <<jump Options>>
+    -> What parking spot did you use?
+        {get_park_dialog()}
+        <<jump Options>>
+===

@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - DialogueUI
+  - Water
+  - UI
+  - Background
+  - Triggers
+  - ItemInteractables
+  - FullInteractables
+  - Cursor
+  - Screenshot
+  - AccusationUI
+  - Boxing
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Screenshot
+    uniqueID: 710892977
+    locked: 0
+  - name: Office
+    uniqueID: 190375967
+    locked: 0
+  - name: Desk
+    uniqueID: 1413776487
+    locked: 0
+  - name: Military
+    uniqueID: 3120151721
+    locked: 0
+  - name: OfficeDesk
+    uniqueID: 1573942715
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Imovable
+    uniqueID: 3582338147
+    locked: 0
+  - name: Bar
+    uniqueID: 3369189889
+    locked: 0
+  - name: Canvas
+    uniqueID: 1012114149
+    locked: 0
+  - name: Cursor
+    uniqueID: 4205918673
+    locked: 0
+  m_RenderingLayers:
+  - Default

@@ -1,0 +1,483 @@
+﻿title: Setup
+position: -1108,-967
+---
+<<declare $seenTutorial = false>>
+<<declare $jumpedTutorial = false>>
+
+<<declare $seenID = false>>
+<<declare $gaveMap = false>>
+<<declare $gaveParking = false>>
+<<declare $gaveBadges = false>>
+<<declare $gavePasswords = false>>
+<<declare $gaveCodenames = false>>
+<<declare $gaveTickets = false>>
+
+<<declare $page = 0>>
+===
+
+
+title: StartTutorial
+position: -844,-966
+---
+Hello, Soldier. How are the preparations for the meeting going?
+    -> Hello, Colonel. Everything is ready. We await the attendees.
+
+Good. Unfortunately we've received information that PIDE agents might try to infiltrate the meeting.
+    -> (Continue)
+
+They will try to impersonate the attendees, so you'll have to double-check everyone’s identities.
+    -> Yes, Colonel. But how should I do that?
+        <<jump BeginTutorial>>
+    -> Yes, Colonel. You can count on me!
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+===
+
+title: BeginTutorial
+position: -557,-1164
+---
+Don't worry. I'll teach you the whole process of mole searching.
+    -> Where do I start?
+        <<jump IDCard>>
+===
+
+title: IDCard
+position: 91,-1164
+---
+The <b>ID Card</b> is very important. You must ask every entrant to show you theirs.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+The information in the card is crucial and you need to check it against your documents.
+    -> (Continue)
+        <<if $seenID is false>>
+                {give_id()}
+                <<set $seenID = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Here, have my card. Drag it onto your table.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<else>>
+    You can check my card. 
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<endif>>
+
+In it you can find personal details like <b>name</b>, <b>photo</b>, <b>eye color</b>, <b>distinctive signs</b>, and so on.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+You must check if the person in front of you matches this information.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Then there's military info, like <b>ID no.</b>, <b>rank</b>, <b>branch</b> and <b>regiment code</b>.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    I'll tell you more about these in a moment. Just make sure to check them on the card. Understood?
+        -> Yes, Colonel.
+            <<jump Badges>>
+<<else>>
+     You also need to validate those. Understood?
+        -> Yes, Colonel.
+            <<set $page = 0>>
+            <<if $jumpedTutorial>>
+                <<jump AskTutorialSkip>>
+            <<else>>
+                <<jump AskTutorial>>
+            <<endif>>
+<<endif>>
+===
+
+title: Badges
+position: 371,-1160
+---
+Keep your eyes out for the <b>insignias</b> the entrants are wearing.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+These must match the <b>branch</b> and <b>rank</b> stated in the <b>ID Card</b>.
+    -> (Continue)
+        <<if $gaveBadges is false>>
+                {give_badge_booklet()}
+                <<set $gaveBadges = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+   This <b>insignias booklet</b> can help you. It contains a list of all <b>branch</b> and <b>rank</b> insignias. Understood?
+        -> Yes, Colonel.
+            <<jump Map>>
+<<else>>
+    The <b>insignias booklet</b> can help you. It contains a list of all <b>rank</b> and <b>branch</b> insignias. Understood?
+        -> Yes, Colonel.
+            <<set $page = 0>>
+            <<if $jumpedTutorial>>
+                <<jump AskTutorialSkip>>
+            <<else>>
+                <<jump AskTutorial>>
+            <<endif>>
+<<endif>>
+===
+
+title: Map
+position: 642,-1158
+---
+Back to the <b>regiment code</b> in the ID Card, each character represents a piece of information.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+The first letter, <b>R</b>, just stands for Regiment.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+The second letter is the <b>branch</b> initial. For example, <b>A</b> stands for Artillery.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Finally, there's a number identifying the <b>regiment</b> one is stationed at.
+    -> (Continue)
+        <<if $gaveMap is false>>
+                {give_map()}
+                <<set $gaveMap = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    This <b>regiment map</b> identifies which cities belong to each regiment.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<else>>
+    The <b>regiment map</b> identifies which cities belong to each regiment.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<endif>>
+
+Ask the attendants where they're stationed and validate it. Understood?
+    -> Yes, Colonel.
+    <<if $seenTutorial is false>>
+        <<jump ParkingSpots>>
+    <<else>>
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+    <<endif>>
+===
+
+title: ParkingSpots
+position: 927,-1152
+---
+Each attendant has an assigned <b>parking spot</b>.
+    -> (Continue)
+        <<if $gaveParking is false>>
+                {give_parking_map()}
+                <<set $gaveParking = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Ask them where they parked and verify it against the information in this <b>parking grid</b>.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<else>>
+    Ask them where they parked and verify the information in the <b>parking grid</b>.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<endif>>
+
+It has the <b>license plate</b> assigned to each parking spot.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+And, on the back, it contains the <b>ID no.</b> associated with each license plate. Understood?
+    -> Yes, Colonel.
+    <<if $seenTutorial is false>>
+        <<jump Passwords>>
+    <<else>>
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+    <<endif>>
+===
+
+title: Passwords
+position: 1186,-1148
+---
+Remember the <b>password</b> system we have in place.
+    -> (Continue)
+        <<if $gavePasswords is false>>
+                {give_password_notepad()}
+                <<set $gavePasswords = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    The list of all active passwords is in this <b>password booklet</b>.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<else>>
+    The list of all active passwords is in the <b>password booklet</b>.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<endif>>
+
+Ask the attendants about one of the password themes. The correct answer depends on the current <b>day of the week</b>. Understood?
+    -> Yes, Colonel.
+    <<if $seenTutorial is false>>
+        <<jump CodeNames>>
+    <<else>>
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+    <<endif>>
+===
+
+title: CodeNames
+position: 1450,-1154
+---
+Remember the <b>codenames</b> we were all given.
+    -> (Continue)
+        <<if $gaveCodenames is false>>
+                {give_codenames()}
+                <<set $gaveCodenames = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Ask every attendant which is theirs and validate it against this <b>list of codenames</b>. Understood?
+        -> Yes, Colonel.
+                <<jump Tickets>>
+<<else>>
+    Ask every attendant which is theirs and validate it against the <b>list of codenames</b>. Understood?
+        -> Yes, Colonel.
+                <<set $page = 0>>
+                <<if $jumpedTutorial>>
+                    <<jump AskTutorialSkip>>
+                <<else>>
+                    <<jump AskTutorial>>
+                <<endif>>
+<<endif>>
+===
+
+title: Tickets
+position: 1713,-1152
+---
+At the end of your investigation, you should give the entrant a <b>ticket</b>.
+    -> (Continue)
+        <<if $gaveTickets is false>>
+                {give_tickets()}
+                <<set $gaveTickets = true>>
+        <<endif>>
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Give one of these <b>green</b> tickets to confirmed participants and a <b>red</b> one to suspected moles.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<else>>
+    Give one <b>green</b> ticket to confirmed participants and a <b>red</b> one to suspected moles.
+        -> (Continue)
+        -> (Skip)
+            <<set $jumpedTutorial = true>>
+            <<jump EndTutorial>>
+<<endif>>
+
+You’ll have to register the <b>level of suspicion</b> for each suspected mole. That’s the number of wrong details you found in your investigation.
+    -> (Continue)
+    -> (Skip)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Once everyone is inside, we'll meet for you to identify any moles. Understood?
+    -> Yes, Colonel.
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+===
+
+title: AskTutorial
+position: -105,-755
+---
+<<set $seenTutorial = true>>
+Soldier, did you understand everything I explained to you? Or do you need me to repeat? 
+    -> All clear, Colonel. <<if $page is 0>>
+        {speed_normal()}
+        <<set $jumpedTutorial = false>>
+        <<jump EndTutorial>>
+    -> Tell me more about the ID card. <<if $page is 0>>
+        {speed_normal()}
+        <<jump IDCard>>
+    -> Tell me more about the insignias. <<if $page is 0>>
+        {speed_normal()}
+        <<jump Badges>>
+    -> (More...) <<if $page is 0>>
+        <<set $page = 1>>
+        {speed_quick()}
+        <<jump AskTutorial>>
+    -> Tell me more about the regiment map.<<if $page is 1>>
+        {speed_normal()}
+        <<jump Map>>
+    -> Tell me more about the parking spots. <<if $page is 1>>
+        {speed_normal()}
+        <<jump ParkingSpots>>
+    -> Tell me more about the passwords. <<if $page is 1>>
+        {speed_normal()}
+        <<jump Passwords>>
+    -> (More...) <<if $page is 1>>
+        <<set $page = 2>>
+        {speed_quick()}
+        <<jump AskTutorial>>
+    -> Tell me more about the codenames. <<if $page is 2>>
+        {speed_normal()}
+        <<jump CodeNames>>
+    -> Tell me more about the tickets. <<if $page is 2>>
+        {speed_normal()}
+        <<jump Tickets>>
+    -> (More...) <<if $page is 2>>
+        <<set $page = 0>>
+        {speed_quick()}
+        <<jump AskTutorial>>
+===
+
+title: AskTutorialSkip
+position: -105,-755
+---
+<<set $seenTutorial = true>>
+Soldier, what do you need me to explain?
+    -> All clear, Colonel. <<if $page is 0>>
+        {speed_normal()}
+        <<set $jumpedTutorial = false>>
+        <<jump EndTutorial>>
+    -> Tell me more about the ID card. <<if $page is 0>>
+        {speed_normal()}
+        <<jump IDCard>>
+    -> Tell me more about the insignias. <<if $page is 0>>
+        {speed_normal()}
+        <<jump Badges>>
+    -> (More...) <<if $page is 0>>
+        <<set $page = 1>>
+        {speed_quick()}
+        <<jump AskTutorialSkip>>
+    -> Tell me more about the regiment map.<<if $page is 1>>
+        {speed_normal()}
+        <<jump Map>>
+    -> Tell me more about the parking spots. <<if $page is 1>>
+        {speed_normal()}
+        <<jump ParkingSpots>>
+    -> Tell me more about the passwords. <<if $page is 1>>
+        {speed_normal()}
+        <<jump Passwords>>
+    -> (More...) <<if $page is 1>>
+        <<set $page = 2>>
+        {speed_quick()}
+        <<jump AskTutorialSkip>>
+    -> Tell me more about the codenames. <<if $page is 2>>
+        {speed_normal()}
+        <<jump CodeNames>>
+    -> Tell me more about the tickets. <<if $page is 2>>
+        {speed_normal()}
+        <<jump Tickets>>
+    -> (More...) <<if $page is 2>>
+        <<set $page = 0>>
+        {speed_quick()}
+        <<jump AskTutorialSkip>>
+===
+
+title: EndTutorial
+position: -122,-350
+---
+<<if $jumpedTutorial is true>>
+    <<if $seenTutorial is true>>
+        <<jump AskTutorialSkip>>
+    <<endif>>
+    <<if $gaveTickets is false>>
+        {give_tickets()}
+    <<endif>>
+    Here is everything you'll need. {give_everything()}
+        -> Thank you, Colonel. But, actually, I need help with something.
+            <<set $gaveMap = true>>
+            <<set $gaveParking = true>>
+            <<set $gaveBadges = true>>
+            <<set $gavePasswords = true>>
+            <<set $gaveCodenames = true>>
+            <<set $gaveTickets = true>>
+            <<jump AskTutorialSkip>>
+        -> Thank you, Colonel. I'll do my best.
+<<endif>>
+
+Great. I trust you will do a good job. Make sure no moles get in.
+    -> Yes, Colonel. Will do!
+        {tutorial_end()}
+===

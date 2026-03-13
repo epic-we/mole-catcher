@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8544109504b2ad24d97f530c3722a7bb, type: 3}
+  m_Name: Hobby
+  m_EditorClassIdentifier: 
+  PasswordQuestion: What do you do on your free time?
+  MondayAnswer: I love cooking.
+  TuesdayAnswer: I like to garden.
+  WednesdayAnswer: I enjoy taking photos.
+  ThursdayAnswer: I love a good hike.
+  FridayAnswer: Painting is my favourite thing to do.
+  SaturdayAnswer: I try to play an instrument.
+  SundayAnswer: I like to read a good book.

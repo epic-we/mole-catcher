@@ -1,0 +1,137 @@
+using System;
+using System.Collections.Generic;
+using NaughtyAttributes;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
+public class MenuManager : MonoBehaviourSingleton<MenuManager>
+{
+    [SerializeField, Scene] private List<string> _noPauseScenes;
+    [SerializeField] private KeyCode _pauseKey;
+    [SerializeField] private GameObject _pauseMenu;
+    [SerializeField] private GameObject _optionsMenu;
+    [SerializeField] private GameObject _instructionsMenu;
+    [SerializeField] private GameObject _confirmQuitMenu;
+    [SerializeField] private GameObject _confirmMainMenu;
+
+    private Animator _anim;
+
+    private bool _canPause = true;
+    public bool CanPause { get => _canPause; set => _canPause = value; }
+    public void SetCanPause() => _canPause = true;
+    public void SetCantPause() => _canPause = false;
+
+    private bool _optionsOpen = false;
+    public bool OptionsOpen => _optionsOpen;
+
+    LocalizationUI _localization;
+
+    private void Awake()
+    {
+        base.SingletonCheck(this, true);
+    }
+
+    private void Start()
+    {
+        _anim = GetComponent<Animator>();
+        _localization = GetComponent<LocalizationUI>();
+
+        ResetMenus();
+
+        SceneManager.sceneLoaded += (scene, mode) => ResetMenus();
+    }
+
+    public void ResetMenus()
+    {
+        Time.timeScale = 1f;
+
+        if (_anim != null)
+        {
+            // _anim.enabled = false;
+            _anim.SetTrigger("Reset");
+        }
+
+        _pauseMenu?.SetActive(false);
+        _optionsMenu?.SetActive(false);
+        _instructionsMenu?.SetActive(false);
+        _confirmQuitMenu?.SetActive(false);
+        _confirmMainMenu?.SetActive(false);
+    }
+
+    public void Quit() => Application.Quit();
+
+    public void LoadScene(string scene) => LoadScene(scene, null, true);
+    public void LoadScene(string scene, Action onLoad = null, bool doFade = true)
+    {
+        SceneChanger.Instance.ChangeScene(scene, onLoad, doFade);
+    }
+
+    public void ResetSelection() => EventSystem.current.SetSelectedGameObject(null);
+
+    private void CheckPause()
+    {
+        if (!_canPause) return;
+
+        if (_noPauseScenes.Contains(SceneManager.GetActiveScene().name)) return;
+
+        if (Input.GetKeyDown(_pauseKey))
+        {
+            if (_pauseMenu.activeInHierarchy)
+            {
+                // Check if other menus are open
+                if (_optionsMenu.activeInHierarchy) ToogleOptionsMenu(false);
+                else if (_instructionsMenu.activeInHierarchy) ToogleInstructionsMenu(false);
+                else if (_confirmMainMenu.activeInHierarchy) ToogleConfirmMainMenu(false);
+                else TooglePauseMenu(false);
+            }
+            else TooglePauseMenu(true);
+        }
+    }
+
+    public void TooglePauseMenu(bool onOff)
+    {
+        // AudioManager.Instance.TogglePauseAllGroups(onOff);
+        _anim.ResetTrigger("Reset");
+        ResetSelection();
+
+        _anim.enabled = true;
+
+        if (onOff)
+        {
+            Time.timeScale = 0f;
+            _anim.SetTrigger("OpenPause");
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            _anim.SetTrigger("ClosePause");
+        }
+    }
+    public void ToogleOptionsMenu(bool onOff)
+    {
+        _anim.ResetTrigger("Reset");
+        _anim.enabled = true;
+        _optionsOpen = onOff;
+
+        _localization.ToggleDropdown(_noPauseScenes.Contains(SceneManager.GetActiveScene().name));
+
+        if (onOff) _anim.SetTrigger("OpenOptions");
+        else _anim.SetTrigger("CloseOptions");
+    }
+    public void ToogleInstructionsMenu(bool onOff)
+    {
+        _anim.ResetTrigger("Reset");
+        _anim.enabled = true;
+
+        if (onOff) _anim.SetTrigger("OpenInstructions");
+        else _anim.SetTrigger("CloseInstructions");
+    }
+    public void ToogleConfirmQuitMenu(bool onOff) => _confirmQuitMenu.SetActive(onOff);
+    public void ToogleConfirmMainMenu(bool onOff) => _confirmMainMenu.SetActive(onOff);
+
+    private void Update()
+    {
+        CheckPause();
+    }
+}

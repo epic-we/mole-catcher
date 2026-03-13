@@ -1,0 +1,476 @@
+﻿title: Setup
+position: -1108,-967
+---
+<<declare $seenTutorial = false>>
+<<declare $jumpedTutorial = false>>
+
+<<declare $seenID = false>>
+<<declare $gaveMap = false>>
+<<declare $gaveParking = false>>
+<<declare $gaveBadges = false>>
+<<declare $gavePasswords = false>>
+<<declare $gaveCodenames = false>>
+<<declare $gaveTickets = false>>
+
+<<declare $page = 0>>
+===
+
+
+title: StartTutorial
+position: -844,-966
+---
+Olá, Soldado. Como estão a correr as preparações para a reunião?
+    -> Olá, Coronel. Tudo está pronto. Aguardamos os participantes.
+
+Muito bem. Infelizmente recebemos informação de que agentes da PIDE poderão tentar infiltrar-se na reunião.
+    -> (Continuar)
+
+Eles tentarão fazer-se passar por participantes, portanto terá de validar a identidade de todos.
+    -> Sim, Coronel. Mas como devo fazer isso?
+        <<jump BeginTutorial>>
+    -> Sim, Coronel. Pode contar comigo!
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+===
+
+title: BeginTutorial
+position: -557,-1164
+---
+Não se preocupe. Vou explicar-lhe todo o processo de identificar infiltrados.
+    -> Onde é que começo?
+        <<jump IDCard>>
+===
+
+title: IDCard
+position: 91,-1164
+---
+O <b>Cartão de Identificação</b> é muito importante. Deve pedir a todos que o mostrem.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+A informação no cartão é crucial e é preciso validá-la contra os seus documentos.
+    -> (Continuar)
+        <<if $seenID is false>>
+                {give_id()}
+                <<set $seenID = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Tome, veja o meu cartão. Arraste-o para a sua mesa.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<else>>
+    Pode ver o meu cartão. 
+        -> (Continuar)    
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<endif>>
+
+Nele pode encontrar informação pessoal como <b>nome</b>, <b>foto</b>, <b>cor dos olhos</b> e <b>sinais particulares</b>, entre outras.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Deve verificar se esta informação condiz com a pessoa à sua frente.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Depois há informação militar, como o <b>Nº de identificação</b>, <b>posto</b>, <b>arma</b> e <b>código de regimento</b>.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Já falarei mais sobre estes dados. Mas garanta que os verifica no cartão. Entendido?
+        -> Sim, Coronel.
+            <<jump Badges>>
+<<else>>
+    Também precisa validar estes. Entendido?
+        -> Sim, Coronel.
+            <<set $page = 0>>
+            <<if $jumpedTutorial>>
+                <<jump AskTutorialSkip>>
+            <<else>>
+                <<jump AskTutorial>>
+            <<endif>>
+<<endif>>
+===
+
+title: Badges
+position: 371,-1160
+---
+Fique atento às <b>insígnias</b> na farda dos participantes.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Estas devem estar de acordo com a <b>arma</b> e <b>posto</b> no <b>Cartão de Identificação</b>.
+    -> (Continuar)
+        <<if $gaveBadges is false>>
+                {give_badge_booklet()}
+                <<set $gaveBadges = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Este <b>livrete de insígnias</b> pode ajudá-lo. Contém a lista de todas as insígnias de <b>armas</b> e <b>postos</b>. 
+        -> Sim, Coronel.
+            <<jump Map>>
+<<else>>
+    O <b>livrete de insígnias</b> pode ajudá-lo. Contém a lista de todas as insígnias de <b>armas</b> e <b>postos</b>. Entendido?
+        -> Sim, Coronel.
+            <<set $page = 0>>
+            <<if $jumpedTutorial>>
+                <<jump AskTutorialSkip>>
+            <<else>>
+                <<jump AskTutorial>>
+            <<endif>>
+<<endif>>
+===
+
+title: Map
+position: 642,-1158
+---
+De volta aos <b>códigos de regimento</b> no Cartão de Identificação, cada caractere representa um pedaço de informação.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+A primeira letra, <b>R</b>, só significa Regimento.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+A segunda letra é a inicial da <b>arma</b>. Por exemplo, <b>A</b> é de Artilharia.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Por fim, há um número que identifica o <b>regimento</b> em que se está colocado.
+    -> (Continuar)
+        <<if $gaveMap is false>>
+                {give_map()}
+                <<set $gaveMap = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Este <b>mapa de regimentos</b> identifica as cidades que pertencem a cada regimento.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<else>>
+    O <b>mapa de regimentos</b> identifica as cidades que pertencem a cada regimento.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<endif>>
+
+Pergunte aos participantes onde estão colocados e valide. Entendido?
+    -> Sim, Coronel.
+    <<if $seenTutorial is false>>
+        <<jump ParkingSpots>>
+    <<else>>
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+    <<endif>>
+===
+
+title: ParkingSpots
+position: 927,-1152
+---
+Cada participante tem um <b>lugar de estacionamento</b> atribuído.
+    -> (Continuar)
+        <<if $gaveParking is false>>
+                {give_parking_map()}
+                <<set $gaveParking = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Pergunte-lhes onde estacionaram e verifique contra a informação nesta <b>grelha de estacionamento</b>.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<else>>
+    Pergunte-lhes onde estacionaram e verifique contra a informação na <b>grelha de estacionamento</b>.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<endif>>
+
+Esta tem a <b>matrícula</b> atribuída a cada lugar de estacionamento.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+E, no verso, contém o <b>Número de Identificação</b> associado a cada matrícula. Entendido?
+    -> Sim, Coronel.
+    <<if $seenTutorial is false>>
+        <<jump Passwords>>
+    <<else>>
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+    <<endif>>
+===
+
+title: Passwords
+position: 1186,-1148
+---
+Lembre-se do sistema de <b>senhas secretas</b> que temos implementado.
+    -> (Continuar)
+        <<if $gavePasswords is false>>
+                {give_password_notepad()}
+                <<set $gavePasswords = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    A lista de todas as senhas activas está neste <b>livrete de senhas</b>.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<else>>
+    A lista de todas as senhas activas está no <b>livrete de senhas</b>.
+        -> (Continuar)
+        -> (Saltar)
+            <<jump EndTutorial>>
+            <<set $jumpedTutorial = true>>
+<<endif>>
+
+Questione os participantes sobre um dos temas das senhas. A resposta correta depende do <b>dia da semana</b> atual. Entendido?
+    -> Sim, Coronel.
+    <<if $seenTutorial is false>>
+        <<jump CodeNames>>
+    <<else>>
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+    <<endif>>
+===
+
+title: CodeNames
+position: 1450,-1154
+---
+Lembre-se dos <b>nomes de código</b> que nos foram dados.
+    -> (Continuar)
+        <<if $gaveCodenames is false>>
+            {give_codenames()}
+            <<set $gaveCodenames = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+<<if $seenTutorial is false>>
+    Pergunte a cada participante qual é o seu e valide-o contra esta <b>lista de nomes de código</b>. Entendido?
+        -> Sim, Coronel.
+            <<jump Tickets>>
+<<else>>
+    Pergunte a cada participante qual é o seu e valide-o contra a <b>lista de nomes de código</b>. Entendido?
+        -> Sim, Coronel.
+            <<set $page = 0>>
+            <<if $jumpedTutorial>>
+                <<jump AskTutorialSkip>>
+            <<else>>
+                <<jump AskTutorial>>
+            <<endif>>
+<<endif>>
+===
+
+title: Tickets
+position: 1713,-1152
+---
+Depois da sua investigação, deve dar um <b>bilhete</b> ao participante.
+    -> (Continuar)
+        <<if $gaveTickets is false>>
+                {give_tickets()}
+                <<set $gaveTickets = true>>
+        <<endif>>
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Dê um bilhete <b>verde</b> a participantes confirmados e um <b>vermelho</b> a quem for suspeito.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Terá de registar o <b>nível de suspeição</b> para cada suspeito. Isto é o número de detalhes errados que encontrou na investigação.
+    -> (Continuar)
+    -> (Saltar)
+        <<set $jumpedTutorial = true>>
+        <<jump EndTutorial>>
+
+Quando toda a gente entrar, reuniremos para que identifique qualquer infiltrado. Entendido?
+    -> Sim, Coronel.
+        <<set $page = 0>>
+        
+        <<if $jumpedTutorial>>
+            <<jump AskTutorialSkip>>
+        <<else>>
+            <<jump AskTutorial>>
+        <<endif>>
+===
+
+title: AskTutorial
+position: -105,-755
+---
+<<set $seenTutorial = true>>
+Soldado, percebeu tudo o que expliquei? Ou precisa que eu repita?
+    -> Tudo claro, Coronel. <<if $page is 0>>
+        {speed_normal()}
+        <<set $jumpedTutorial = false>>
+        <<jump EndTutorial>>
+    -> Diga-me mais sobre o Cartão de Identificação. <<if $page is 0>>
+        {speed_normal()}
+        <<jump IDCard>>
+    -> Diga-me mais sobre as insígnias. <<if $page is 0>>
+        {speed_normal()}
+        <<jump Badges>>
+    -> (Mais...) <<if $page is 0>>
+        <<set $page = 1>>
+        {speed_quick()}
+        <<jump AskTutorial>>
+    -> Diga-me mais sobre o mapa de regimentos.<<if $page is 1>>
+        {speed_normal()}
+        <<jump Map>>
+    -> Diga-me mais sobre os lugares de estacionamento. <<if $page is 1>>
+        {speed_normal()}
+        <<jump ParkingSpots>>
+    -> Diga-me mais sobre as senhas secretas. <<if $page is 1>>
+        {speed_normal()}
+        <<jump Passwords>>
+    -> (Mais...) <<if $page is 1>>
+        <<set $page = 2>>
+        {speed_quick()}
+        <<jump AskTutorial>>
+    -> Diga-me mais sobre os nomes de código. <<if $page is 2>>
+        {speed_normal()}
+        <<jump CodeNames>>
+    -> Diga-me mais sobre os bilhetes. <<if $page is 2>>
+        {speed_normal()}
+        <<jump Tickets>>
+    -> (Mais...) <<if $page is 2>>
+        <<set $page = 0>>
+        {speed_quick()}
+        <<jump AskTutorial>>
+===
+
+title: AskTutorialSkip
+position: -105,-755
+---
+<<set $seenTutorial = true>>
+Soldado, o que precisa que explique?
+    -> Tudo claro, Coronel. <<if $page is 0>>
+        {speed_normal()}
+        <<set $jumpedTutorial = false>>
+        <<jump EndTutorial>>
+    -> Diga-me mais sobre o Cartão de Identificação. <<if $page is 0>>
+        {speed_normal()}
+        <<jump IDCard>>
+    -> Diga-me mais sobre as insígnias. <<if $page is 0>>
+        {speed_normal()}
+        <<jump Badges>>
+    -> (Mais...) <<if $page is 0>>
+        <<set $page = 1>>
+        {speed_quick()}
+        <<jump AskTutorialSkip>>
+    -> Diga-me mais sobre o mapa de regimentos.<<if $page is 1>>
+        {speed_normal()}
+        <<jump Map>>
+    -> Diga-me mais sobre os lugares de estacionamento. <<if $page is 1>>
+        {speed_normal()}
+        <<jump ParkingSpots>>
+    -> Diga-me mais sobre as senhas secretas. <<if $page is 1>>
+        {speed_normal()}
+        <<jump Passwords>>
+    -> (Mais...) <<if $page is 1>>
+        <<set $page = 2>>
+        {speed_quick()}
+        <<jump AskTutorialSkip>>
+    -> Diga-me mais sobre os nomes de código. <<if $page is 2>>
+        {speed_normal()}
+        <<jump CodeNames>>
+    -> Diga-me mais sobre os bilhetes. <<if $page is 2>>
+        {speed_normal()}
+        <<jump Tickets>>
+    -> (Mais...) <<if $page is 2>>
+        <<set $page = 0>>
+        {speed_quick()}
+        <<jump AskTutorialSkip>>
+===
+
+title: EndTutorial
+position: -122,-350
+---
+<<if $jumpedTutorial is true>>
+    <<if $seenTutorial is true>>
+        <<jump AskTutorialSkip>>
+    <<endif>>
+    <<if $gaveTickets is false>>
+        {give_tickets()}
+    <<endif>>
+    Aqui tem tudo o que vai precisar. {give_everything()}
+        -> Obrigado, Coronel. Mas, na verdade, preciso de ajuda com algo.
+            <<set $gaveMap = true>>
+            <<set $gaveParking = true>>
+            <<set $gaveBadges = true>>
+            <<set $gavePasswords = true>>
+            <<set $gaveCodenames = true>>
+            <<set $gaveTickets = true>>
+            <<jump AskTutorialSkip>>
+        -> Obrigado, Coronel. Farei o meu melhor.       
+<<endif>>
+
+Ótimo. Confio que fará um bom trabalho. Garanta que não entra nenhum infiltrado.
+    -> Sim, Coronel. Assim farei!
+        {tutorial_end()}
+
+===
